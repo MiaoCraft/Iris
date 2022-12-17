@@ -25,5 +25,5 @@ jobs:
       - name: Upload a Build Target 
         uses: actions/upload-artifact@v2
         with:
-          name: Adapt
+          name: Iris
           path: build/libs
