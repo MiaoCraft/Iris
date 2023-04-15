@@ -23,10 +23,9 @@ public class WorldEditLink {
                     (int) min.getClass().getDeclaredMethod("getY").invoke(max),
                     (int) min.getClass().getDeclaredMethod("getZ").invoke(max)
             );
-        } catch (Throwable e) {
+        } catch (Throwable ignored) {
 
         }
-
         return null;
     }
 }
