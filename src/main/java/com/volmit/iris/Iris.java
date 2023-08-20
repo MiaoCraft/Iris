@@ -28,7 +28,7 @@ import com.volmit.iris.core.link.MultiverseCoreLink;
 import com.volmit.iris.core.link.MythicMobsLink;
 import com.volmit.iris.core.loader.IrisData;
 import com.volmit.iris.core.nms.INMS;
-import com.volmit.iris.core.nms.v19_4.NMSBinding19_4;
+import com.volmit.iris.core.nms.v20.NMSBinding1_20_1;
 import com.volmit.iris.core.pregenerator.LazyPregenerator;
 import com.volmit.iris.core.service.StudioSVC;
 import com.volmit.iris.core.tools.IrisToolbelt;
@@ -62,7 +62,10 @@ import com.volmit.iris.util.scheduling.ShurikenQueue;
 import io.papermc.lib.PaperLib;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.serializer.ComponentSerializer;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.WorldCreator;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -88,7 +91,7 @@ import java.util.Map;
 
 @SuppressWarnings("CanBeFinal")
 public class Iris extends VolmitPlugin implements Listener {
-    public static final String OVERWORLD_TAG = "3001";
+    public static final String OVERWORLD_TAG = "3600";
 
     private static final Queue<Runnable> syncJobs = new ShurikenQueue<>();
 
@@ -464,20 +467,20 @@ public class Iris extends VolmitPlugin implements Listener {
         try {
             fc.load(new File("bukkit.yml"));
             ConfigurationSection section = fc.getConfigurationSection("worlds");
-            if(section == null) {
+            if (section == null) {
                 return;
             }
 
-            for(String s : section.getKeys(false)){
+            for (String s : section.getKeys(false)) {
                 ConfigurationSection entry = section.getConfigurationSection(s);
-                if(!entry.contains("generator", true)) {
+                if (!entry.contains("generator", true)) {
                     continue;
                 }
 
                 String generator = entry.getString("generator");
-                if(generator.startsWith("Iris:")) {
+                if (generator.startsWith("Iris:")) {
                     generator = generator.split("\\Q:\\E")[1];
-                } else if(generator.equalsIgnoreCase("Iris")) {
+                } else if (generator.equalsIgnoreCase("Iris")) {
                     generator = IrisSettings.get().getGenerator().getDefaultWorldType();
                 } else {
                     continue;
@@ -485,7 +488,7 @@ public class Iris extends VolmitPlugin implements Listener {
 
                 Iris.info("2 World: %s | Generator: %s", s, generator);
 
-                if(Bukkit.getWorlds().stream().anyMatch(w -> w.getName().equals(s))) {
+                if (Bukkit.getWorlds().stream().anyMatch(w -> w.getName().equals(s))) {
                     continue;
                 }
 
@@ -576,13 +579,13 @@ public class Iris extends VolmitPlugin implements Listener {
     private boolean setupChecks() {
         boolean passed = true;
         Iris.info("Version Information: " + instance.getServer().getVersion() + " | " + instance.getServer().getBukkitVersion());
-        if (!instance.getServer().getBukkitVersion().contains(NMSBinding19_4.NMS_VERSION)) {
+        if (!instance.getServer().getBukkitVersion().contains(NMSBinding1_20_1.NMS_VERSION)) {
             passed = false;
             Iris.warn("============================================");
             Iris.warn("=");
             Iris.warn("=");
             Iris.warn("=");
-            Iris.warn("Iris is not compatible with this version of Minecraft.\nPlease use " + NMSBinding19_4.NMS_VERSION + " or use an older version of Iris.");
+            Iris.warn("Iris is not compatible with this version of Minecraft.\nPlease use " + NMSBinding1_20_1.NMS_VERSION + " or use an older version of Iris.");
             Iris.warn("=");
             Iris.warn("=");
             Iris.warn("=");
